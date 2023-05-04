@@ -8,34 +8,17 @@ datasource db {
 }
 
 model Usuario {
-  id              Int          @id @default(autoincrement())
-  email           String       @unique
+  id              Int        @id @default(autoincrement())
+  email           String     @unique
   senha           String
-  cpf             String       @unique
+  cpf             String     @unique
   telefone        String?
   data_nascimento DateTime
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-  Enfermeiro      Enfermeiro[]
-  Paciente        Paciente[]
+  tipo            String     @default("paciente")
+  coren           String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
   Endereco        Endereco[]
-}
-
-model Enfermeiro {
-  id        Int      @id
-  usuario   Usuario  @relation(fields: [id], references: [id])
-  tipo      String   @default("enfermeiro")
-  coren     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Paciente {
-  id        Int      @id
-  usuario   Usuario  @relation(fields: [id], references: [id])
-  tipo      String   @default("paciente")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Endereco {
@@ -47,5 +30,6 @@ model Endereco {
   numero    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  usuario   Usuario  @relation(fields: [id], references: [id])
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+  usuarioId Int
 }
