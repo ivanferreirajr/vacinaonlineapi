@@ -2,10 +2,15 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsuarioDto } from './usuario.dto';
 import { PrismaService } from '../../database/prisma.service';
 import * as bcrypt from 'bcrypt';
+import { EnderecoService } from './endereco/endereco.service';
+import { EnderecoDto } from './endereco/endereco.dto';
 
 @Injectable()
 export class UsuarioService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private enderecoService: EnderecoService,
+  ) {}
 
   async create(createUsuarioDto: UsuarioDto) {
     const userExists = await this.prisma.usuario.findFirst({
@@ -117,5 +122,85 @@ export class UsuarioService {
       },
     });
     return user;
+  }
+
+  async createAddress(id: number, createEnderecoDto: EnderecoDto) {
+    const address = await this.enderecoService.create(createEnderecoDto);
+    return address;
+  }
+
+  async findAddress(id: number) {
+    const address = await this.enderecoService.findOne(id);
+    return address;
+  }
+
+  async createChronicDiseases(id: number, chronicDiseases: string) {
+    const userExists = await this.prisma.usuario.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!userExists) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: 'User does not exists',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const user = await this.prisma.usuario.update({
+      data: {
+        doencas_cronicas: chronicDiseases,
+      },
+      where: {
+        id,
+      },
+    });
+    return user;
+  }
+
+  async removeChronicDiseases(id: number, index: number) {
+    const users = await this.prisma.usuario.findUnique({
+      where: {
+        id,
+      },
+    });
+    return users;
+  }
+
+  async createAllergies(id: number, allergy: string) {
+    const userExists = await this.prisma.usuario.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!userExists) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: 'User does not exists',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const user = await this.prisma.usuario.update({
+      data: {
+        alergias: allergy,
+      },
+      where: {
+        id,
+      },
+    });
+    return user;
+  }
+
+  async removeAllergies(id: number, index: number) {
+    const users = await this.prisma.usuario.findUnique({
+      where: {
+        id,
+      },
+    });
+    return users;
   }
 }

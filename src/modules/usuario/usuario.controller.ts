@@ -10,6 +10,7 @@ import {
 import { UsuarioService } from './usuario.service';
 import { UsuarioDto } from './usuario.dto';
 import { ApiOperation } from '@nestjs/swagger';
+import { EnderecoDto } from './endereco/endereco.dto';
 
 @Controller('usuarios')
 export class UsuarioController {
@@ -45,5 +46,54 @@ export class UsuarioController {
     return this.usuarioService.remove(+id);
   }
 
-  // TODO: rota para troca de senha
+  @Post(':id/endereco')
+  @ApiOperation({ summary: 'Create user address', tags: ['Address'] })
+  createAddress(
+    @Param('id') id: string,
+    @Body() createEnderecoDto: EnderecoDto,
+  ) {
+    return this.usuarioService.createAddress(+id, createEnderecoDto);
+  }
+
+  @Get(':id/endereco')
+  @ApiOperation({ summary: 'Retrieve user address', tags: ['Address'] })
+  findAddress(@Param('id') id: string) {
+    return this.usuarioService.findAddress(+id);
+  }
+
+  @Post(':id/doencas')
+  @ApiOperation({
+    summary: 'Create user chronic diseases',
+    tags: ['Chronic Diseases'],
+  })
+  createChronicDiseases(
+    @Param('id') id: string,
+    @Body() chronicDiseases: string,
+  ) {
+    return this.usuarioService.createChronicDiseases(+id, chronicDiseases);
+  }
+
+  @Delete(':id/doencas/:index')
+  @ApiOperation({
+    summary: 'Delete user chronic diseases',
+    tags: ['Chronic Diseases'],
+  })
+  removeChronicDiseases(
+    @Param('id') id: string,
+    @Param('index') index: string,
+  ) {
+    return this.usuarioService.removeChronicDiseases(+id, +index);
+  }
+
+  @Post(':id/alergias')
+  @ApiOperation({ summary: 'Create user allergy', tags: ['Allergy'] })
+  createAllergies(@Param('id') id: string, @Body() allergy: string) {
+    return this.usuarioService.createAllergies(+id, allergy);
+  }
+
+  @Delete(':id/alergias/:index')
+  @ApiOperation({ summary: 'Delete user allergy', tags: ['Allergy'] })
+  removeAllergies(@Param('id') id: string, @Param('index') index: string) {
+    return this.usuarioService.removeAllergies(+id, +index);
+  }
 }

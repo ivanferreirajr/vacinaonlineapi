@@ -25,9 +25,7 @@ export class UsuarioDto {
   @ApiProperty()
   tipo?: string;
 
-  @ApiProperty()
   createdAt?: Date;
 
-  @ApiProperty()
   updatedAt?: Date;
 }
