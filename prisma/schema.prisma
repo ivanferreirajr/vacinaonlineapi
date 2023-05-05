@@ -20,7 +20,6 @@ model Usuario {
   updatedAt       DateTime     @updatedAt
   Endereco        Endereco[]
   Vacina          Vacina[]
-  Dependente      Dependente[]
 }
 
 model Endereco {
@@ -47,18 +46,4 @@ model Vacina {
   pacienteId      Int
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
-  Dependente      Dependente[]
-}
-
-model Dependente {
-  id              Int      @id @default(autoincrement())
-  cpf             String
-  nome            String
-  data_nascimento DateTime
-  paciente        Usuario  @relation(fields: [pacienteId], references: [id])
-  pacienteId      Int
-  vacina          Vacina   @relation(fields: [vacinaId], references: [id])
-  vacinaId        Int
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
 }
